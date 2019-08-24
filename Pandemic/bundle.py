@@ -3,6 +3,14 @@ import io
 import os
 import shutil
 import subprocess
+import sys
+
+
+def _run(*args):
+    kwargs = {}
+    if sys.version_info.major >= 3:
+        kwargs['text'] = True
+    return subprocess.check_output(args, **kwargs)
 
 
 class BundleActioner(object):
@@ -11,10 +19,10 @@ class BundleActioner(object):
         pass
 
     def clone(self, source, name):
-        return ""
+        raise NotImplementedError("Abstract bundle source")
 
     def update(self):
-        return ""
+        raise NotImplementedError("Abstract bundle source")
 
     def remove(self, name):
         shutil.rmtree(name)
@@ -24,19 +32,19 @@ class BundleActioner(object):
 class BundleGit(BundleActioner):
 
     def clone(self, source, name):
-        return subprocess.check_output(['git', 'clone', source, name])
+        return _run('git', 'clone', source, name)
 
     def update(self):
-        return subprocess.check_output(['git', 'pull'])
+        return _run('git', 'pull')
 
 
 class BundleHg(BundleActioner):
 
     def clone(self, source, name):
-        return subprocess.check_output(['hg', 'clone', source, name])
+        return _run('hg', 'clone', source, name)
 
     def update(self):
-        return subprocess.check_output(['hg', 'pull'])
+        return _run('hg', 'pull')
 
 
 class BundleLocal(BundleActioner):
@@ -60,10 +68,10 @@ class BundleLocal(BundleActioner):
 class BundleScript(BundleActioner):
 
     def clone(self, source, name):
-        return subprocess.check_output(['cp', '-R', source, name])
+        return _run('cp', '-R', source, name)
 
     def update(self):
-        return subprocess.check_output(['./.update'])
+        return _run('./.update')
 
 
 actioners = {
