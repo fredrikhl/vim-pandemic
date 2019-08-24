@@ -1,4 +1,6 @@
-from distutils.core import  setup
+#!/usr/bin/env python
+# encoding: utf-8
+from distutils.core import setup
 
 setup(
     name="Pandemic",
@@ -6,6 +8,6 @@ setup(
     author="http://jwcxz.com/",
     url="http://jwcxz.com/projects/vim-pandemic",
     requires=["argparse"],
-    packages=["Pandemic"], 
+    packages=["Pandemic"],
     scripts=["bin/pandemic"]
 )
