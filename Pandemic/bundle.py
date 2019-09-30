@@ -9,7 +9,8 @@ import sys
 def _run(*args):
     kwargs = {}
     if sys.version_info.major >= 3:
-        kwargs['text'] = True
+        # kwargs['text'] = True
+        kwargs['universal_newlines'] = True
     return subprocess.check_output(args, **kwargs)
 
 
